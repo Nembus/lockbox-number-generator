@@ -8,3 +8,6 @@ requires-python = ">=3.12"
 
 [tools]
 dependencies = ["ruff"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
