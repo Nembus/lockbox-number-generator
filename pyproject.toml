@@ -2,7 +2,7 @@
 name = "lockbox-number-generator"
 version = "0.1.0"
 description = "Generates unique 4-digit numbers"
-dependencies = ["typer"]
+dependencies = ["typer", "rich"]
 readme = "README.md"
 requires-python = ">=3.12"
 

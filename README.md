@@ -13,6 +13,7 @@ CLI tool that generates unique 4-digit numbers where each digit appears only onc
 - Track generated numbers to avoid duplicates
 - Blacklist specific numbers
 - View last generated number
+- Display table of all generated numbers
 
 ## Installation
 
@@ -43,6 +44,11 @@ python main.py
 # Blacklist a number
 python main.py -b 1234
 python main.py --blacklist 1234
+
+# Show all generated numbers and their creation dates
+python main.py -s
+python main.py --show
+
 ```
 
 ## Development
