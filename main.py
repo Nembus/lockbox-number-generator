@@ -2,6 +2,7 @@ import typer
 from pathlib import Path
 import random
 import json
+from typing import Optional
 
 app = typer.Typer()
 STORAGE_FILE = Path("generated_numbers.json")
@@ -14,28 +15,36 @@ def load_generated_numbers():
 def save_generated_numbers(numbers):
     STORAGE_FILE.write_text(json.dumps(list(numbers)))
 
+def get_last_number():
+    numbers = load_generated_numbers()
+    return list(numbers)[-1] if numbers else None
+
 def generate_unique_number():
-    # Get all available digits
     digits = list(range(10))
-    # Generate 4 unique digits
     selected_digits = random.sample(digits, 4)
-    # Convert to number
     return int(''.join(map(str, selected_digits)))
 
 def generate_number():
     generated = load_generated_numbers()
-
-    # Generate new unique number
     while True:
         new_number = generate_unique_number()
         if new_number not in generated:
             break
-
     generated.add(new_number)
     save_generated_numbers(generated)
-    typer.echo(f"Generated number: {new_number}")
+    return new_number
 
-app.command()(generate_number)
+@app.callback(invoke_without_command=True)
+def main(generate: Optional[bool] = typer.Option(False, "--generate", "-g")):
+    if generate:
+        new_number = generate_number()
+        typer.echo(f"Generated number: {new_number}")
+    else:
+        last = get_last_number()
+        if last:
+            typer.echo(f"Last generated number: {last}")
+        else:
+            typer.echo("No numbers generated yet")
 
 if __name__ == "__main__":
     app()
