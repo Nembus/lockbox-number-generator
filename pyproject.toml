@@ -1,5 +1,5 @@
 [project]
-name = "four-num-generator"
+name = "lockbox-number-generator"
 version = "0.1.0"
 description = "Generates unique 4-digit numbers"
 dependencies = ["typer"]
