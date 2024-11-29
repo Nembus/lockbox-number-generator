@@ -6,5 +6,7 @@ dist/
 wheels/
 *.egg-info
 
+generated_numbers.json
+
 # Virtual environments
 .venv
