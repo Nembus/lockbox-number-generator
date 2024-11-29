@@ -1,8 +1,7 @@
+<img width="600" height="600" src="images/graphic.png" alt="main graphic" />
+
 Do you need to generate a four digit code for your lock?
 Are you rotating these numbers often and don't want to repeat the same numbers?
-
-
-![image](images/graphic.png)
 
 # Lockbox Number Generator
 
