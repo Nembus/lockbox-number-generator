@@ -1,8 +1,9 @@
-import typer
-from pathlib import Path
-import random
 import json
+import random
+from pathlib import Path
 from typing import Optional
+
+import typer
 
 app = typer.Typer()
 STORAGE_FILE = Path("generated_numbers.json")
@@ -18,6 +19,10 @@ def save_generated_numbers(numbers):
 def get_last_number():
     numbers = load_generated_numbers()
     return list(numbers)[-1] if numbers else None
+
+def is_valid_number(number: int) -> bool:
+    digits = str(number)
+    return len(digits) == 4 and len(set(digits)) == 4
 
 def generate_unique_number():
     digits = list(range(10))
@@ -35,8 +40,19 @@ def generate_number():
     return new_number
 
 @app.callback(invoke_without_command=True)
-def main(generate: Optional[bool] = typer.Option(False, "--generate", "-g")):
-    if generate:
+def main(
+    generate: Optional[bool] = typer.Option(False, "--generate", "-g"),
+    blacklist: Optional[int] = typer.Option(None, "--blacklist", "-b")
+):
+    if blacklist is not None:
+        if not is_valid_number(blacklist):
+            typer.echo("Error: Blacklist number must be 4 digits with no repeating digits")
+            raise typer.Exit(1)
+        numbers = load_generated_numbers()
+        numbers.add(blacklist)
+        save_generated_numbers(numbers)
+        typer.echo(f"Added {blacklist} to blacklist")
+    elif generate:
         new_number = generate_number()
         typer.echo(f"Generated number: {new_number}")
     else:
