@@ -1,16 +1,19 @@
-import pytest
-from pathlib import Path
-import json
 import sys
 from datetime import datetime
+from pathlib import Path
+
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from main import (
-    INTERNAL_BLACKLIST, generate_number, generate_unique_number,
-    is_valid_number,
-    load_all_blacklisted_numbers, load_generated_numbers,
-    load_full_data,
-    save_generated_numbers,
+    INTERNAL_BLACKLIST,
+    generate_number,
+    generate_unique_number,
     get_last_number,
+    is_valid_number,
+    load_all_blacklisted_numbers,
+    load_generated_numbers,
+    save_generated_numbers,
 )
 
 
