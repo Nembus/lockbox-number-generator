@@ -6,8 +6,13 @@ dependencies = ["typer", "rich"]
 readme = "README.md"
 requires-python = ">=3.12"
 
-[tools]
-dependencies = ["ruff"]
+[tool.ruff]
+# List of paths to include (by default, include all files)
+include = ["*.py","tests"]
+# Specify the rules you want enabled
+[tool.ruff.lint]
+# Specify the rules you want enabled
+select = ["F"]
 
 [project.optional-dependencies]
 dev = ["pytest"]
