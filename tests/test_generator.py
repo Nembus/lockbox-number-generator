@@ -7,9 +7,11 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from main import (
     INTERNAL_BLACKLIST,
+    add_number,
     generate_number,
     generate_unique_number,
     get_last_number,
+    is_available_number,
     is_valid_number,
     load_all_blacklisted_numbers,
     load_generated_numbers,
@@ -20,7 +22,7 @@ from main import (
 @pytest.fixture
 def temp_storage(tmp_path, monkeypatch):
     test_file = tmp_path / "generated_numbers.json"
-    monkeypatch.setattr('main.STORAGE_FILE', test_file)
+    monkeypatch.setattr("main.STORAGE_FILE", test_file)
     return test_file
 
 
@@ -51,15 +53,15 @@ def test_is_valid_number():
     assert not is_valid_number(1233)
     assert not is_valid_number(123)
     assert not is_valid_number(12345)
-    assert not is_valid_number('12345')
-    assert not is_valid_number('abc123')
+    assert not is_valid_number("12345")
+    assert not is_valid_number("abc123")
 
 
 def test_save_and_load_numbers(temp_storage):
     test_date = datetime.now().strftime("%Y-%m-%d")
     numbers_data = [
         {"number": 1234, "dateCreated": test_date},
-        {"number": 5678, "dateCreated": test_date}
+        {"number": 5678, "dateCreated": test_date},
     ]
     save_generated_numbers(numbers_data)
     loaded = load_generated_numbers()
@@ -70,7 +72,7 @@ def test_get_last_number(temp_storage):
     test_date = datetime.now().strftime("%Y-%m-%d")
     numbers_data = [
         {"number": 1234, "dateCreated": test_date},
-        {"number": 5678, "dateCreated": test_date}
+        {"number": 5678, "dateCreated": test_date},
     ]
     save_generated_numbers(numbers_data)
     assert get_last_number() == 5678
@@ -90,3 +92,38 @@ def test_internal_blacklist():
     # Test generated number isn't in blacklist
     number = generate_unique_number()
     assert number not in INTERNAL_BLACKLIST
+
+
+def test_is_available_number(temp_storage):
+    # Valid and available number
+    assert is_available_number(9876) == True
+
+    # Number in internal blacklist
+    assert is_available_number(1234) == False
+
+    # Invalid number (repeating digits)
+    assert is_available_number(1122) == False
+
+    # Add a number to generated_numbers.json
+    numbers_data = [
+        {"number": 5678, "dateCreated": datetime.now().strftime("%Y-%m-%d")}
+    ]
+    save_generated_numbers(numbers_data)
+
+    # Number already in generated_numbers.json
+    assert is_available_number(5678) == False
+
+
+def test_add_number(temp_storage):
+    # Valid number
+    assert add_number(9876) == True
+    assert 9876 in load_generated_numbers()
+
+    # Already added number
+    assert add_number(9876) == False
+
+    # Blacklisted number
+    assert add_number(1234) == False
+
+    # Invalid number
+    assert add_number(1122) == False
